@@ -14,6 +14,7 @@ export const UserForm = ({ data, updateFieldHandler }: UserProps) => {
                 <input type="text" name="name" id='name'
                     value={data.name}
                     placeholder="Digie o seu nome"
+                    required
                     onChange={e => updateFieldHandler('name', e.target.value)} />
             </div>
             <div className="form-control">
@@ -21,6 +22,7 @@ export const UserForm = ({ data, updateFieldHandler }: UserProps) => {
                 <input type="email" name="email" id='email'
                     value={data.email}
                     placeholder="Digie o seu e-mail"
+                    required
                     onChange={e => updateFieldHandler('email', e.target.value)} />
             </div>
         </>

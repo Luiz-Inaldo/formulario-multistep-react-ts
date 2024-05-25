@@ -1,7 +1,7 @@
 // components
-import { UserForm } from './components/UserForm';
+import { UserForm } from './components/userForm/UserForm';
 import { ReviewForm } from './components/reviewForm/ReviewForm';
-import { Thanks } from './components/Thanks';
+import { Thanks } from './components/thanks/Thanks';
 import { ReactElement, useState } from 'react';
 import { Steps } from './components/steps/Steps';
 
@@ -10,11 +10,12 @@ import { UseForm } from './hooks/UseForm';
 
 // icons
 import { GrFormNext, GrFormPrevious } from 'react-icons/gr';
+import { FiSend } from 'react-icons/fi';
 
 // css
 import './App.css'
 
-type FormProps = {
+export type FormProps = {
   name: string,
   email: string,
   review: string,
@@ -34,17 +35,17 @@ function App() {
 
   const updateFieldHandler = (key: string, value: string) => {
     setData(prev => {
-      return {...prev, [key]: value}
+      return { ...prev, [key]: value }
     })
   }
 
   const formComponents: ReactElement[] = [
-    <UserForm data={data} updateFieldHandler={updateFieldHandler}/>,
+    <UserForm data={data} updateFieldHandler={updateFieldHandler} />,
     <ReviewForm data={data} updateFieldHandler={updateFieldHandler} />,
-    <Thanks data={data} updateFieldHandler={updateFieldHandler}/>
+    <Thanks data={data} />
   ]
 
-  const { changeStep, currentStep, currentComponent} = UseForm(formComponents);
+  const { changeStep, currentStep, currentComponent, isLastStep } = UseForm(formComponents);
 
   return (
     <>
@@ -55,19 +56,26 @@ function App() {
         </div>
         <div className="form-container">
           <Steps currentStep={currentStep} />
-          <form>
+          <form onSubmit={(e) => changeStep(currentStep + 1, e)}>
             <div className="inputs-container">
               {currentComponent}
             </div>
             <div className="actions">
-              <button onClick={(e) => changeStep(currentStep -1, e)}>
+              <button onClick={(e) => changeStep(currentStep - 1, e)}>
                 <GrFormPrevious />
                 <span>Voltar</span>
+              </button>
+              {isLastStep ? (
+                <button>
+                  <span>Enviar</span>
+                  <FiSend />
                 </button>
-              <button onClick={(e) => changeStep(currentStep + 1, e)}>
-                <span>Avançar</span>
-                <GrFormNext />
+              ) : (
+                <button>
+                  <span>Avançar</span>
+                  <GrFormNext />
                 </button>
+              )}
             </div>
           </form>
         </div>
